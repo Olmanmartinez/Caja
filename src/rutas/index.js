@@ -1,6 +1,4 @@
-const { Router } = require('express');
-const { body, query } =  require('express-validator');
-const controladorInicio = require('../controladores/controladorinicio');
-const rutas = Router();
-rutas.post('/post', controladorInicio.EjemploPost);
+const router = require('express').Router();
+//const { body, query } =  require('express-validator');
+router.post('/post', );
 module.exports = rutas;

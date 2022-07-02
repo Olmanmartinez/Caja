@@ -14,7 +14,7 @@ app.use(express.json());
 // rutas
 app.use('/api/detallecierrecajapos', require('./rutas/detallecierrecajaspos'));
 app.use('/api/detallecierrecaja', require('./rutas/detallecierrecajas'));
-
+app.use('/api/monedas', require('./rutas/monedas'));
 app.listen(app.get('port'), () => {
     console.log("Servidor iniciado en el puerto " + app.get('port'));
 });

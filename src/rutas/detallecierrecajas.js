@@ -28,12 +28,12 @@ router.get("/:id",
 //u
 router.put("/:id",
   param("id").toInt(),
-  body("idcierre").isInt(),
-  body("iddenominacion").isInt(),
-  body("cantidad").isInt(),
-  body("monto").isFloat(),
-  body("detalle_aperturacaja_idregistro").isInt(),
-  body("denominacionmonedas_idregistro").isInt(),
+  body("idcierre").isInt().optional({nullable:true}),
+  body("iddenominacion").isInt().optional({nullable:true}),
+  body("cantidad").isInt().optional({nullable:true}),
+  body("monto").isFloat().optional({nullable:true}),
+  body("detalle_aperturacaja_idregistro").isInt().optional({nullable:true}),
+  body("denominacionmonedas_idregistro").isInt().optional({nullable:true}),
   validator,
   put
 )

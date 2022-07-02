@@ -26,11 +26,11 @@ router.get("/:id",
 //u
 router.put("/:id", 
   param("id").toInt(),
-  body("idcierre").isInt(),
-  body("idtipos").isInt(),
-  body("devolucion").isFloat(),
-  body("monto").isFloat(),
-  body("cierrecaja_idregistro").isInt(),
+  body("idcierre").isInt().optional({nullable:true}),
+  body("idtipos").isInt().optional({nullable:true}),
+  body("devolucion").isFloat().optional({nullable:true}),
+  body("monto").isFloat().optional({nullable:true}),
+  body("cierrecaja_idregistro").isInt().optional({nullable:true}),
   validator,
   put
 )

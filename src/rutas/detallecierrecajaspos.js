@@ -1,17 +1,46 @@
 const { post, get, put, del, getPorId } = require("../controladores/detallecierrecajaspos")
+const { validator } = require("../config/validator");
+const { body,param } = require("express-validator");
 
 const router = require("express").Router()
 //c
-router.post("/", post)
+router.post("/", 
+  body("idregistro").isInt(),
+  body("idcierre").isInt(),
+  body("idtipos").isInt(),
+  body("devolucion").isFloat(),
+  body("monto").isFloat(),
+  body("cierrecaja_idregistro").isInt(),
+  validator,
+  post
+)
 //r
 router.get("/", get)
-router.get("/:id", getPorId)
+
+router.get("/:id",
+  param("id").toInt(),
+  validator,
+  getPorId
+)
 
 //u
-router.put("/:id", put)
+router.put("/:id", 
+  param("id").toInt(),
+  body("idcierre").isInt(),
+  body("idtipos").isInt(),
+  body("devolucion").isFloat(),
+  body("monto").isFloat(),
+  body("cierrecaja_idregistro").isInt(),
+  validator,
+  put
+)
 
 //d
-router.delete("/:id", del)
+router.delete("/:id",
+  param("id").toInt(),
+  validator,
+  del
+)
 
 
 module.exports = router

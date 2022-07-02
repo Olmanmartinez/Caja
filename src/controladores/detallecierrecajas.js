@@ -29,7 +29,11 @@ exports.getPorId = async (req, res) => {
 exports.get = async (_req, res) => {
   try {
     const data = await prisma.detalle_cierrecaja.findMany()
-    res.json({ data })
+    const model = await prisma.$queryRaw`desc detalle_cierrecaja`
+    res.json({ data,info:{
+      msg:"esta ruta soporta el metodo post para el cual se espera los siguirntes datos:",
+      model
+    } })
   } catch (err) {
     res.status(500).json({ err: err.message })
   }

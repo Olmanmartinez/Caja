@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model aperturacaja {
+  idregistro                Int                    @id
+  caja                      Int?
+  estacion                  Int?
+  fechahora                 DateTime?              @db.Date
+  cierre                    Int?
+  monto                     Float?
+  fechaapertura             DateTime?              @db.Date
+  estaciones_NumeroEstacion Int
+  estaciones                estaciones             @relation(fields: [estaciones_NumeroEstacion], references: [NumeroEstacion], onDelete: NoAction, onUpdate: NoAction, map: "fk_aperturacaja_estaciones1")
+  cierrecaja                cierrecaja[]
+  detalle_aperturacaja      detalle_aperturacaja[]
+
+  @@index([estaciones_NumeroEstacion], map: "fk_aperturacaja_estaciones1_idx")
+}
+
+model cajas {
+  estacion              Int        @id
+  activo                Int?
+  fechahora             DateTime?  @db.Date
+  estado                String?    @db.VarChar(45)
+  cierrecaja_idregistro Int
+  cierrecaja            cierrecaja @relation(fields: [cierrecaja_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_cajas_cierrecaja1")
+
+  @@index([cierrecaja_idregistro], map: "fk_cajas_cierrecaja1_idx")
+}
+
+model cierrecaja {
+  idregistro              Int                    @id
+  caja                    Int?
+  usuario                 Int?
+  estacion                Int?
+  apertura                Int?
+  fechahora               DateTime?              @db.Date
+  efectivoreal            Float?
+  efectivosistema         Float?
+  tarjetadevolucionreal   Float?
+  tarjetamontoreal        Float?
+  tarjetamontosistema     Float?
+  ventasefectivo          Float?
+  ventastarjeta           Float?
+  egresos                 Float?
+  propina                 Float?
+  descuento               Float?
+  impuesto15              Float?
+  impuesto18              Float?
+  exento                  Float?
+  fechacierre             DateTime?              @db.Date
+  aperturacaja_idregistro Int
+  aperturacaja            aperturacaja           @relation(fields: [aperturacaja_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_cierrecaja_aperturacaja")
+  cajas                   cajas[]
+  detallecierrecajapos    detallecierrecajapos[]
+
+  @@index([aperturacaja_idregistro], map: "fk_cierrecaja_aperturacaja_idx")
+}
+
+model denominacionmonedas {
+  idregistro         Int                  @id
+  moneda             Int?
+  denominacion       String?              @db.VarChar(25)
+  valor              Float?
+  tipo               String?              @db.VarChar(45)
+  monedas_idregistro Int
+  monedas            monedas              @relation(fields: [monedas_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_denominacionmonedas_monedas1")
+  detalle_cierrecaja detalle_cierrecaja[]
+
+  @@index([monedas_idregistro], map: "fk_denominacionmonedas_monedas1_idx")
+}
+
+model detalle_aperturacaja {
+  idregistro              Int                  @id
+  idapertura              Int?
+  iddenominacion          Int?
+  cantidad                Int?
+  monto                   Float?
+  aperturacaja_idregistro Int
+  aperturacaja            aperturacaja         @relation(fields: [aperturacaja_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_aperturacaja_aperturacaja1")
+  detalle_cierrecaja      detalle_cierrecaja[]
+
+  @@index([aperturacaja_idregistro], map: "fk_detalle_aperturacaja_aperturacaja1_idx")
+}
+
+model detalle_cierrecaja {
+  idregistro                      Int                  @id
+  idcierre                        Int?
+  iddenominacion                  Int?
+  cantidad                        Int?
+  monto                           Float?
+  detalle_aperturacaja_idregistro Int
+  denominacionmonedas_idregistro  Int
+  denominacionmonedas             denominacionmonedas  @relation(fields: [denominacionmonedas_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_cierrecaja_denominacionmonedas1")
+  detalle_aperturacaja            detalle_aperturacaja @relation(fields: [detalle_aperturacaja_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle_cierrecaja_detalle_aperturacaja1")
+
+  @@index([denominacionmonedas_idregistro], map: "fk_detalle_cierrecaja_denominacionmonedas1_idx")
+  @@index([detalle_aperturacaja_idregistro], map: "fk_detalle_cierrecaja_detalle_aperturacaja1_idx")
+}
+
+model detallecierrecajapos {
+  idregistro            Int        @id
+  idcierre              Int?
+  idtipos               Int?
+  devolucion            Float?
+  monto                 Float?
+  cierrecaja_idregistro Int
+  cierrecaja            cierrecaja @relation(fields: [cierrecaja_idregistro], references: [idregistro], onDelete: NoAction, onUpdate: NoAction, map: "fk_detallecierrecajapos_cierrecaja1")
+
+  @@index([cierrecaja_idregistro], map: "fk_detallecierrecajapos_cierrecaja1_idx")
+}
+
+model estaciones {
+  NumeroEstacion Int            @id
+  nombre         String?        @db.VarChar(45)
+  activo         Int?
+  vistaprevia    Int?
+  tecladovirtual Int?
+  nombretipo     Int?
+  nombreproducto Int?
+  aperturacaja   aperturacaja[]
+}
+
+model monedas {
+  idregistro          Int                   @id
+  nombre              String?               @db.VarChar(45)
+  descripcion         String?               @db.VarChar(45)
+  simbolo             String?               @db.VarChar(45)
+  cambio              Float?
+  nacional            Int?
+  denominacionmonedas denominacionmonedas[]
+}

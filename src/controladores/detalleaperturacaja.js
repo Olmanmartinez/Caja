@@ -1,72 +1,60 @@
-const { PrismaClient } = require("@prisma/client")
-const prisma = new PrismaClient()
+const models = require("../models");
 //c
 exports.post = async (req, res) => {
   try {
-    const data = await prisma.detalle_aperturacaja.create({
-      data: req.body
-    })
-    res.json({ data })
+    const data = await models.detalle_aperturacaja.create(req.body);
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-
-}
+};
 //r
 exports.getPorId = async (req, res) => {
-  const idregistro = req.params.id
+  const idregistro = req.params.id;
   try {
-    const data = await prisma.detalle_aperturacaja.findUnique({
-      where: {
-        idregistro
-      }
-    })
-    res.json({ data })
+    const data = await models.detalle_aperturacaja.findByPk(idregistro);
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
+};
 exports.get = async (_req, res) => {
   try {
-    const data = await prisma.detalle_aperturacaja.findMany()
-    const model = await prisma.$queryRaw`desc detalle_aperturacaja`
-    res.json({ data,info:{
-      msg:"esta ruta soporta el metodo post para el cual se espera los siguirntes datos:",
-      model
-    } })
+    const data = await models.detalle_aperturacaja.findAll();
+    res.json({
+      data,
+    });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
+};
 
 //u
 exports.put = async (req, res) => {
-  const idregistro = req.params.id
+  const idregistro = req.params.id;
   try {
-    const data = await prisma.detalle_aperturacaja.update({
-      data: req.body,
+    const data = await models.detalle_aperturacaja.update(req.body,{
       where: {
-        idregistro
-      }
-    })
-    res.json({ data })
+        idregistro,
+      },
+    });
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
+};
 
 //d
 exports.del = async (req, res) => {
-  const idregistro = req.params.id
+  const idregistro = req.params.id;
   try {
-    const data = await prisma.detalle_aperturacaja.delete({
-      where:{
-        idregistro
-      }
-    })
-    res.json({ data })
+    const data = await models.detalle_aperturacaja.destroy({
+      where: {
+        idregistro,
+      },
+    });
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
-
+};

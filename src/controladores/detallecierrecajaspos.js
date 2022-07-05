@@ -1,11 +1,8 @@
-const { PrismaClient } = require("@prisma/client")
-const prisma = new PrismaClient()
+const models = require("../models")
 //c
 exports.post = async (req, res) => {
   try {
-    const data = await prisma.detallecierrecajapos.create({
-      data: req.body
-    })
+    const data = await models.detallecierrecajapos.create(req.body)
     res.json({ data })
   } catch (err) {
     res.status(500).json({ err: err.message })
@@ -16,11 +13,9 @@ exports.post = async (req, res) => {
 exports.getPorId = async (req, res) => {
   const idregistro = req.params.id
   try {
-    const data = await prisma.detallecierrecajapos.findUnique({
-      where: {
+    const data = await models.detallecierrecajapos.findByPk(
         idregistro
-      }
-    })
+    )
     res.json({ data })
   } catch (err) {
     res.status(500).json({ err: err.message })
@@ -28,12 +23,8 @@ exports.getPorId = async (req, res) => {
 }
 exports.get = async (_req, res) => {
   try {
-    const data = await prisma.detallecierrecajapos.findMany()
-    const model = await prisma.$queryRaw`desc detallecierrecajapos`
-    res.json({ data,info:{
-      msg:"esta ruta soporta el metodo post para el cual se espera los siguirntes datos:",
-      model
-    } })
+    const data = await models.detallecierrecajapos.findAll()
+    res.json({ data,})
   } catch (err) {
     res.status(500).json({ err: err.message })
   }
@@ -43,8 +34,7 @@ exports.get = async (_req, res) => {
 exports.put = async (req, res) => {
   const idregistro = req.params.id
   try {
-    const data = await prisma.detallecierrecajapos.update({
-      data: req.body,
+    const data = await models.detallecierrecajapos.update(req.body,{
       where: {
         idregistro
       }
@@ -59,7 +49,7 @@ exports.put = async (req, res) => {
 exports.del = async (req, res) => {
   const idregistro = req.params.id
   try {
-    const data = await prisma.detallecierrecajapos.delete({
+    const data = await models.detallecierrecajapos.destroy({
       where:{
         idregistro
       }

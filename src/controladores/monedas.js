@@ -1,72 +1,65 @@
-const { PrismaClient } = require("@prisma/client")
-const prisma = new PrismaClient()
+const models = require("../models");
 //c
 exports.post = async (req, res) => {
   try {
-    const data = await prisma.monedas.create({
-      data: req.body
-    })
-    res.json({ data })
+    const data = await models.monedas.create(req.body);
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-
-}
+};
 //r
 exports.getPorId = async (req, res) => {
-  const idregistro = req.params.id
+  const idregistro = req.params.id;
   try {
-    const data = await prisma.monedas.findUnique({
-      where: {
-        idregistro
-      }
-    })
-    res.json({ data })
+    const data = await models.monedas.findByPk(
+      idregistro,
+    );
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
+};
 exports.get = async (_req, res) => {
   try {
-    const data = await prisma.monedas.findMany()
-    const model = await prisma.$queryRaw`desc monedas`
-    res.json({ data,info:{
-      msg:"esta ruta soporta el metodo post para el cual se espera los siguirntes datos:",
-      model
-    } })
+    const data = await models.monedas.findAll();
+    res.json({
+      data,
+    });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
+};
 
 //u
 exports.put = async (req, res) => {
-  const idregistro = req.params.id
+  const idregistro = req.params.id;
   try {
-    const data = await prisma.monedas.update({
-      data: req.body,
-      where: {
-        idregistro
-      }
-    })
-    res.json({ data })
+    const data = await models.monedas.update(
+      { ...req.body },
+      {
+        where: {
+          idregistro,
+        },
+      },
+    );
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
+};
 
 //d
 exports.del = async (req, res) => {
-  const idregistro = req.params.id
+  const idregistro = req.params.id;
   try {
-    const data = await prisma.monedas.delete({
-      where:{
-        idregistro
-      }
-    })
-    res.json({ data })
+    const data = await models.monedas.destroy({
+      where: {
+        idregistro,
+      },
+    });
+    res.json({ data });
   } catch (err) {
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err: err.message });
   }
-}
-
+};

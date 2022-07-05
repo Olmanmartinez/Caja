@@ -4,7 +4,9 @@ const app = express();
 app.set('port', 3000 || process.env.PORT);
 
 // middlewares
+// esta condicion es para ejecutar estos middlewares solo en desarrollo en produccion no son necesarios
 if (process.env.NODE_ENV != "production") {
+    require("dotenv").config()
     const morgan = require('morgan');
     app.use(morgan('dev'));
 }

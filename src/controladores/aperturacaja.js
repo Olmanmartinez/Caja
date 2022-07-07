@@ -1,8 +1,9 @@
+
 const models = require("../models");
 //c
 exports.post = async (req, res) => {
   try {
-    const data = await models.detalle_cierrecaja.create(req.body);
+    const data = await models.aperturacaja.create(req.body);
     res.json({ data });
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -12,7 +13,9 @@ exports.post = async (req, res) => {
 exports.getPorId = async (req, res) => {
   const idregistro = req.params.id;
   try {
-    const data = await models.detalle_cierrecaja.findByPk(idregistro);
+    const data = await models.aperturacaja.findByPk(
+      idregistro,
+    );
     res.json({ data });
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -20,8 +23,10 @@ exports.getPorId = async (req, res) => {
 };
 exports.get = async (_req, res) => {
   try {
-    const data = await models.detalle_cierrecaja.findAll();
-    res.json({ data });
+    const data = await models.aperturacaja.findAll();
+    res.json({
+      data,
+    });
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
@@ -31,11 +36,14 @@ exports.get = async (_req, res) => {
 exports.put = async (req, res) => {
   const idregistro = req.params.id;
   try {
-    const data = await models.detalle_cierrecaja.update(req.body,{
-      where: {
-        idregistro,
+    const data = await models.aperturacaja.update(
+      { ...req.body },
+      {
+        where: {
+          idregistro,
+        },
       },
-    });
+    );
     res.json({ data });
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -46,7 +54,7 @@ exports.put = async (req, res) => {
 exports.del = async (req, res) => {
   const idregistro = req.params.id;
   try {
-    const data = await models.detalle_cierrecaja.destroy({
+    const data = await models.aperturacaja.destroy({
       where: {
         idregistro,
       },

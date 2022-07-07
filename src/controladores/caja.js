@@ -1,8 +1,9 @@
+
 const models = require("../models");
 //c
 exports.post = async (req, res) => {
   try {
-    const data = await models.detalle_cierrecaja.create(req.body);
+    const data = await models.cajas.create(req.body);
     res.json({ data });
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -10,9 +11,11 @@ exports.post = async (req, res) => {
 };
 //r
 exports.getPorId = async (req, res) => {
-  const idregistro = req.params.id;
+  const estacion = req.params.id;
   try {
-    const data = await models.detalle_cierrecaja.findByPk(idregistro);
+    const data = await models.cajas.findByPk(
+      estacion,
+    );
     res.json({ data });
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -20,8 +23,10 @@ exports.getPorId = async (req, res) => {
 };
 exports.get = async (_req, res) => {
   try {
-    const data = await models.detalle_cierrecaja.findAll();
-    res.json({ data });
+    const data = await models.cajas.findAll();
+    res.json({
+      data,
+    });
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
@@ -29,11 +34,29 @@ exports.get = async (_req, res) => {
 
 //u
 exports.put = async (req, res) => {
-  const idregistro = req.params.id;
+  const estacion = req.params.id;
   try {
-    const data = await models.detalle_cierrecaja.update(req.body,{
+    const data = await models.cajas.update(
+      { ...req.body },
+      {
+        where: {
+          estacion,
+        },
+      },
+    );
+    res.json({ data, msg:"Registro actualizado!" });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+};
+
+//d
+exports.del = async (req, res) => {
+  const estacion = req.params.id;
+  try {
+    const data = await models.cajas.destroy({
       where: {
-        idregistro,
+        estacion,
       },
     });
     res.json({ data });
@@ -42,17 +65,3 @@ exports.put = async (req, res) => {
   }
 };
 
-//d
-exports.del = async (req, res) => {
-  const idregistro = req.params.id;
-  try {
-    const data = await models.detalle_cierrecaja.destroy({
-      where: {
-        idregistro,
-      },
-    });
-    res.json({ data });
-  } catch (err) {
-    res.status(500).json({ err: err.message });
-  }
-};

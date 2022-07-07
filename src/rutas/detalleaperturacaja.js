@@ -6,13 +6,11 @@ const router = require("express").Router()
 //c
 router.post("/",
   body("idregistro").isInt(),
-  body("caja").isInt().default(1),
-  body("estacion").isInt().default(1),
-  body("cierre").isInt().default(1),
-  body("monto").isFloat().default(1),
-  body("fechahora").isDate().default(Date.now()),
-  body("fechaapertura").isDate().default(Date.now()),
-  body("estaciones_NumeroEstacion").isInt().default(1),
+  body("idapertura").isInt(),
+  body("iddenominacion").isInt(),
+  body("cantidad").isInt(),
+  body("monto").isFloat(),
+  body("aperturacaja_idregistro").isInt(),
   validator,
   post
 )
@@ -29,13 +27,12 @@ router.get("/:id",
 //u
 router.put("/:id",
   param("id").toInt(),
-  body("caja").isInt().default(1).optional({ nullable: true }),
-  body("estacion").isInt().default(1).optional({ nullable: true }),
-  body("cierre").isInt().default(1).optional({ nullable: true }),
-  body("monto").isFloat().default(1).optional({ nullable: true }),
-  body("fechahora").isDate().default(Date.now()).optional({ nullable: true }),
-  body("fechaapertura").isDate().default(Date.now()).optional({ nullable: true }),
-  body("estaciones_NumeroEstacion").isInt().default(1).optional({ nullable: true }),
+  body("idapertura").isInt().optional({ nullable: true }),
+  body("iddenominacion").isInt().optional({ nullable: true }),
+  body("cantidad").isInt().optional({ nullable: true }),
+  body("monto").isFloat().optional({ nullable: true }),
+  body("aperturacaja_idregistro").isInt().optional({ nullable: true }),
+
   validator,
   put
 )
